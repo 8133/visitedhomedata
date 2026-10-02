@@ -9,7 +9,6 @@ import socket
 import struct
 import sys
 import uuid
-import zipfile
 
 from nacl.bindings import crypto_scalarmult_base
 from cryptography.exceptions import InvalidSignature
@@ -229,13 +228,11 @@ def run_session(args, out, fp, account, device_id):
 
 def main():
     p = argparse.ArgumentParser(
-        description='get clash of clans base data from a tag without emulator! tested on coc 18.600.7. makes a new account unless you use --reuse.',
+        description='get clash of clans base data from a tag without emulator or apk! fingerprint is built in. tested on coc 18.600.7. makes a new account unless you use --reuse.',
         add_help=False)
     p.add_argument('-h', '--help', action='help', help='show this help and exit')
     p.add_argument('--host', default='gamea.clashofclans.com', metavar='host', help='server to connect to (default: gamea.clashofclans.com)')
     p.add_argument('--port', type=int, default=9339, metavar='port', help='server port (default: 9339)')
-    p.add_argument('--apk', default=None, metavar='path', help='your coc.apk, checks the current folder then local/ if you leave this out')
-    p.add_argument('--fingerprint', metavar='path', help='use a saved server-fingerprint.json')
     p.add_argument('--reuse', nargs='?', const='latest', metavar='path',
                    help='reuse the last saved account, or give it an account.json path or session folder')
     p.add_argument('--account', metavar='path', help='pick an account.json to use with --reuse')
@@ -256,13 +253,7 @@ def main():
     if args.account and args.reuse != 'latest':
         p.error('use --reuse path or --reuse --account path, not both')
     try:
-        apk = Path(args.apk) if args.apk else (Path('coc.apk') if Path('coc.apk').is_file() else Path('local/coc.apk'))
-        if args.apk == 'coc.apk' and not apk.exists() and Path('local/coc.apk').is_file():
-            apk = Path('local/coc.apk')
-        with zipfile.ZipFile(apk) as z:
-            fp = json.loads(z.read('assets/fingerprint.json'))
-        if args.fingerprint:
-            fp = json.loads(Path(args.fingerprint).read_text())
+        fp = {'sha': '7839fe492f55e0c5cb096b788649cd82f2a99f01', 'version': '18.600.6'}
         account = select_account(args.reuse, args.account, args.output)
         device_id = account.get('device_id',str(uuid.uuid4())) if account else str(uuid.uuid4())
         out = create_output_directory(args.output)
@@ -279,10 +270,10 @@ def main():
                 if attempt==0 and exc.details['error_code']==7 and supplied and supplied['sha']!=fp['sha']:
                     fp = supplied
                     save_private(out/'server-fingerprint.json',json.dumps(fp).encode())
-                    print('Retrying once with the server-provided asset fingerprint.',file=sys.stderr)
+                    print('got the fingerprint from the server, reconnecting with it.',file=sys.stderr)
                     continue
                 raise
-    except (OSError,EOFError,ValueError,KeyError,TypeError,struct.error,zipfile.BadZipFile,InvalidSignature,LoginRejected) as exc:
+    except (OSError,EOFError,ValueError,KeyError,TypeError,struct.error,InvalidSignature,LoginRejected) as exc:
         print(f'Client failed: {type(exc).__name__}: {exc}',file=sys.stderr)
         return 1
 
