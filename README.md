@@ -1,30 +1,36 @@
 # visitedhomedata ![Visitors](https://visitor-badge.laobi.icu/badge?page_id=8133.visitedhomedata&logo=github)
 
-a python script to get clash of clans base data (buildings, obstacles, last_played etc) from a tag without emulator!
+a python script to get clash of clans base data (buildings, obstacles, last_played etc) from a tag without emulator or apk!
 
 ![alt_text](https://i.ibb.co/1YZ9HMtH/Screenshot-2026-10-02-051006.png)
 
 ## setup
 
-you need python 3.10 or newer. download the latest coc apk, rename it to `coc.apk` and put it in the same directory of the script.
+you only need python 3.10 or newer. edit: no apk or fingerprint file needed, the fingerprint is built into the script and auto updated from the gamea.clashofclans.com servers!
 
 ```bash
 pip3 install -r requirements.txt
 ```
 
-tested with coc **18.600.7**. a newer apk might need the script to be updated too (prob wont update if this wont get enough stars)
+tested with coc **18.600.7**. a new game version might need the script to be updated too (prob wont update if this wont get enough stars)
 
 ## usage
 
 ```bash
-python3 coc_client.py --apk coc.apk --tag "#2PP"
+python3 coc_client.py --tag "#2PP"
 ```
 
 it makes a new account every time. if you want to reuse the last saved account:
 
 ```bash
-python3 coc_client.py --apk coc.apk --tag "#2PP" --reuse
+python3 coc_client.py --tag "#2PP" --reuse
 ```
+
+## fingerprint
+
+the fingerprint is hardcoded, so you don't need to provide a file. it uses asset version **18.600.6**, sha `7839fe492f55e0c5cb096b788649cd82f2a99f01`.
+
+if it becomes outdated, the script gets the new fingerprint from the coc servers and reconnects  automatically.
 
 ## output
 
@@ -152,7 +158,7 @@ these are for coc **18.600.7**:
 | 26443 | avatarprofile |
 | 20206 | avatarprofilefailed |
 
-the script gets the base data from avatarprofile. no emulator needed to run it.
+the script gets the base data from avatarprofile. no emulator or apk needed to run it.
 
 thanks to astra & ghirda for the help
 last updated on october 03 2026
