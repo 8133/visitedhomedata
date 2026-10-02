@@ -1,4 +1,4 @@
-# visitedhomedata
+# visitedhomedata ![Visitors](https://visitor-badge.laobi.icu/badge?page_id=8133.visitedhomedata&logo=github)
 
 a python script to get clash of clans base data (buildings, obstacles, last_played etc) from a tag without emulator!
 
