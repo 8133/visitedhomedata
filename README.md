@@ -2,6 +2,8 @@
 
 a python script to get clash of clans base data (buildings, obstacles, last_played etc) from a tag without emulator!
 
+<a href="https://ibb.co/Q796sk3s"><img src="https://i.ibb.co/1YZ9HMtH/Screenshot-2026-10-02-051006.png" alt="Screenshot-2026-10-02-051006" border="0"></a>
+
 ## setup
 
 you need python 3.10 or newer. download the latest coc apk, rename it to `coc.apk` and put it in the same directory of the script.
